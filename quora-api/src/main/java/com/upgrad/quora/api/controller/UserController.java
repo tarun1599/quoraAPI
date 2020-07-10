@@ -2,6 +2,7 @@ package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.SignupUserRequest;
 import com.upgrad.quora.api.model.SignupUserResponse;
+import com.upgrad.quora.service.business.UserBusinessService;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
-public class SignupController {
+public class UserController {
 
     @Autowired
-   // private SignupBusinessService signupBusinessService;
+   private UserBusinessService userBusinessService;
 
     @RequestMapping(method = RequestMethod.POST, path = "/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) {
@@ -29,16 +30,20 @@ public class SignupController {
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setFirstName(signupUserRequest.getFirstName());
         userEntity.setLastName(signupUserRequest.getLastName());
+        userEntity.setUserName(signupUserRequest.getUserName());
         userEntity.setEmail(signupUserRequest.getEmailAddress());
         userEntity.setPassword(signupUserRequest.getPassword());
-        userEntity.setSalt("1234abc");
+        userEntity.setCountry(signupUserRequest.getCountry());
+        userEntity.setAmoutme(signupUserRequest.getAboutMe());
+        userEntity.setDob(signupUserRequest.getDob());
+        userEntity.setContactnumber(signupUserRequest.getContactNumber());
+        userEntity.setSalt("xyz123abc");
 
 
 
-       // final UserEntity createdUserEntity = signupBusinessService.signup(userEntity);
-       // SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("REGISTERED");
-       // return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
-        return new ResponseEntity<SignupUserResponse>(HttpStatus.CREATED);
+       final UserEntity createdUserEntity = userBusinessService.signup(userEntity);
+       SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("REGISTERED");
+       return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
 
 }

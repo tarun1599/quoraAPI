@@ -3,9 +3,10 @@ package com.upgrad.quora.service.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "users", schema = "quora")
+@Table(name = "users")
 @NamedQueries(
         {
                 @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid"),
@@ -13,7 +14,7 @@ import javax.validation.constraints.Size;
         }
 )
 
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -24,15 +25,20 @@ public class UserEntity {
     @Size(max = 64)
     private String uuid;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRSTNAME")
     @NotNull
     @Size(max = 200)
     private String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column(name = "LASTNAME")
     @NotNull
     @Size(max = 200)
     private String lastName;
+
+    @Column(name = "USERNAME")
+    @NotNull
+    @Size(max = 200)
+    private String userName;
 
     @Column(name = "EMAIL")
     @NotNull
@@ -99,6 +105,14 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
