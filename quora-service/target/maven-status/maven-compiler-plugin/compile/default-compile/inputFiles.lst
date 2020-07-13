@@ -1,3 +1,4 @@
+D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\ErrorResponse.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\JwtTokenProvider.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\InvalidQuestionException.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\ServiceConfiguration.java
@@ -13,5 +14,6 @@ D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\se
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\entity\UserAuthEntity.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\AnswerNotFoundException.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\dao\UserDao.java
+D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\RestExceptionHandler.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\business\PasswordCryptographyProvider.java
 D:\Tarun-Blockchain\Trello_quora\quora-service\src\main\java\com\upgrad\quora\service\exception\SignOutRestrictedException.java

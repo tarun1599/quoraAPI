@@ -10,7 +10,8 @@ import java.io.Serializable;
 @NamedQueries(
         {
                 @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid"),
-                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email =:email")
+                @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email =:email"),
+                @NamedQuery(name = "userByUserName", query = "select u from UserEntity u where u.userName =:userName")
         }
 )
 
@@ -69,6 +70,11 @@ public class UserEntity implements Serializable {
     @NotNull
     @Size(max = 30)
     private String dob;
+
+    @Column(name = "ROLE")
+    @NotNull
+    @Size(max = 30)
+    private String role;
 
     @Column(name = "CONTACTNUMBER")
     @NotNull
@@ -161,6 +167,14 @@ public class UserEntity implements Serializable {
 
     public void setDob(String dob) {
         this.dob = dob;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getContactnumber() {
