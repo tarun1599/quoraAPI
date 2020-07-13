@@ -77,7 +77,8 @@ public class UserController {
 
         UserEntity user = userAuth.getUser_id();
 
-        SigninResponse authorizedUserResponse =  new SigninResponse().id(user.getUuid())
+        // Create Sign in poyload
+         SigninResponse authorizedUserResponse =  new SigninResponse().id(user.getUuid())
                 .message("SIGNED IN SUCCESSFULLY");
 
         HttpHeaders headers = new HttpHeaders();
