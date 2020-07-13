@@ -1,6 +1,7 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.*;
+import com.upgrad.quora.service.business.QuestionService;
 import com.upgrad.quora.service.business.UserAuthService;
 import com.upgrad.quora.service.business.UserService;
 import com.upgrad.quora.service.entity.QuestionEntity;
@@ -28,22 +29,19 @@ public class QuestionController {
     private UserService userService;
 
     @Autowired
-    private com.upgrad.quora.service.business.QuestionService questionService;
-
-    @RequestMapping(value = "/question", method = RequestMethod.POST)
-    public String question() {
-        return "question";
-    }
-
+    private QuestionService questionService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/question/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionResponse> createQuestion(@RequestBody final QuestionRequest questionRequest,
-                                                           @RequestHeader final String authToken) {
+                                                           @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
+        String[] bearerToken = authorization.split("Bearer ");
+        UserAuthEntity userAuthEntity = userAuthService.getUserByAuth(bearerToken[1]);
+
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setContent(questionRequest.getContent());
         questionEntity.setUuid(UUID.randomUUID().toString());
         questionEntity.setDate(ZonedDateTime.now());
-        //questionEntity.setUser();
+        questionEntity.setUser(userAuthEntity.getUser_id());
 
         QuestionEntity questionEntityRes = questionService.createQuestion(questionEntity);
 
