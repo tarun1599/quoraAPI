@@ -4,6 +4,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,13 @@ public class UserBusinessService {
     public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
 
         // Validate if username already exists
-        if(userDao.getUserByUserName(userEntity.getUserName()) != null){
-            throw new SignUpRestrictedException("SGR-001","Try any other Username, this Username has already been taken");
+        if (userDao.getUserByUserName(userEntity.getUserName()) != null) {
+            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken");
         }
 
         // Validate if email already exists
-        if(userDao.getUserByEmail(userEntity.getEmail()) != null){
-            throw new SignUpRestrictedException("SGR-002","This user has already been registered, try with any other emailId");
+        if (userDao.getUserByEmail(userEntity.getEmail()) != null) {
+            throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId");
         }
 
         // Encrypt the passward and rewrite passward and salt.
@@ -46,12 +47,12 @@ public class UserBusinessService {
     public UserAuthEntity signin(final String username, final String password) throws AuthenticationFailedException {
 
         UserEntity userEntity = userDao.getUserByUserName(username);
-        if( userEntity == null){
-            throw new AuthenticationFailedException("ATH-001","This username does not exist");
+        if (userEntity == null) {
+            throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
 
         final String encryptedPassword = cryptographyProvider.encrypt(password, userEntity.getSalt());
-        if(encryptedPassword.equals(userEntity.getPassword())){
+        if (encryptedPassword.equals(userEntity.getPassword())) {
 
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             UserAuthEntity userAuth = new UserAuthEntity();
@@ -69,12 +70,26 @@ public class UserBusinessService {
 
             return userAuth;
 
-        }
-        else{
+        } else {
             throw new AuthenticationFailedException("ATH-002", "Password failed");
         }
 
+    }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public UserAuthEntity signout(final String getUserAuth) throws AuthenticationFailedException, SignOutRestrictedException {
+        UserAuthEntity userAuth = userDao.getUserAuth(getUserAuth);
+
+        if (userAuth == null) {
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
+        }
+
+        final ZonedDateTime now = ZonedDateTime.now();
+        userAuth.setLogoutAt(now);
+
+        userDao.updateAuth(userAuth);
+
+        return userAuth;
     }
 
 }
